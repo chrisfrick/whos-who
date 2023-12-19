@@ -1,0 +1,14 @@
+<div>
+  <div>
+    <h3>Name</h3>
+    <h3>Points</h3>
+  </div>
+  <span>_________________________________</span>
+  <div>
+    <app-entry
+      *ngFor="let user of leaderboard"
+      [playerName]="user.playerName"
+      [finalScore]="user.finalScore"
+    ></app-entry>
+  </div>
+</div>
