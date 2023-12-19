@@ -6,8 +6,8 @@ import { Component, Input, OnInit } from "@angular/core";
   styleUrls: ["./entry.component.css"],
 })
 export class EntryComponent implements OnInit {
-  @Input() username: string = "";
-  @Input() score: number = 0;
+  @Input() playerName: string = "";
+  @Input() finalScore: number = 0;
 
   constructor() {}
 
