@@ -12,6 +12,8 @@ export class UserService {
     incorrectAnswers: 0,
     finalScore: 0,
     playerName: "unnamed player",
+    difficulty: "easy",
+    genres: ["rock"],
   });
   currentGame = this.currentGameSource.asObservable();
 
@@ -19,14 +21,20 @@ export class UserService {
     {
       playerName: "MadMax!!",
       finalScore: 10,
+      difficulty: "easy",
+      genres: ["rock"],
     },
     {
       playerName: "Mirag3",
       finalScore: 8,
+      difficulty: "easy",
+      genres: ["rock"],
     },
     {
       playerName: "Bob",
       finalScore: 12,
+      difficulty: "easy",
+      genres: ["rock"],
     },
   ]);
 

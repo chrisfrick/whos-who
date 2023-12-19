@@ -4,4 +4,6 @@ export default interface Game {
   incorrectAnswers?: number;
   finalScore: number;
   playerName: string;
+  difficulty: string;
+  genres: string[];
 }
