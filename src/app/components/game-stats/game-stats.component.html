@@ -1,0 +1,10 @@
+<div class="game-stats">
+  <h3>Correct: {{ correctAnswers }}</h3>
+  <h3>Incorrect: {{ incorrectAnswers }}</h3>
+  <ng-container *ngIf="currentScore">
+    <h3>Current Score: {{ currentScore }}</h3>
+  </ng-container>
+  <ng-container *ngIf="finalScore">
+    <h3>Final Score: {{ finalScore }}</h3>
+  </ng-container>
+</div>
