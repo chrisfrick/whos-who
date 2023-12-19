@@ -5,11 +5,16 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
+
 import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { EntryComponent } from "./leaderboard/entry/entry.component";
+import { GameOverComponent } from "./game-over/game-over.component";
+import { GameStatsComponent } from "./components/game-stats/game-stats.component";
+import { WelcomeComponent } from "./welcome/welcome.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
+  { path: "", component: WelcomeComponent },
+  { path: "game-over", component: GameOverComponent },
   { path: "leaderboard", component: LeaderboardComponent },
 ];
 
@@ -19,7 +24,11 @@ const routes: Routes = [
     HomeComponent,
     LeaderboardComponent,
     EntryComponent,
+    WelcomeComponent,
+    GameOverComponent,
+    GameStatsComponent,
   ],
+
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],
