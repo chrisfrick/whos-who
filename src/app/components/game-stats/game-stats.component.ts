@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/services/userService';
 
 @Component({
   selector: 'app-game-stats',
@@ -7,15 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameStatsComponent implements OnInit {
 
-  correctAnswers: number = 8
-  incorrectAnswers: number = 2
+  correctAnswers: number = 0
+  incorrectAnswers: number = 0
   currentScore: number | null = null
-  finalScore: number | null = 800
+  finalScore: number | null = 0
 
-  constructor() { }
+  constructor(private gameData: UserService) { }
 
   ngOnInit(): void {
-    // TODO: get game stats from service
+    this.gameData.currentGame.subscribe(({numberOfQuestions, correctAnswers, incorrectAnswers, finalScore }) => {
+      if (correctAnswers !== undefined && incorrectAnswers !== undefined && numberOfQuestions !== undefined) {
+        console.log(correctAnswers, numberOfQuestions)
+        this.correctAnswers = correctAnswers
+        this.incorrectAnswers = incorrectAnswers
+
+        if (finalScore) {
+          this.currentScore = null
+          this.finalScore = finalScore
+        } else {
+          this.currentScore = correctAnswers / numberOfQuestions
+        }
+      }
+    })
   }
 
 }
