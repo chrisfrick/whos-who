@@ -1,0 +1,25 @@
+<div class="container">
+  <h1>Who's Who?</h1>
+  <div>
+    <h3 class="game-question">Question #{{ questionNumber }}</h3>
+  </div>
+  <div>
+    <button (click)="onPlayButtonClick()">Play</button>
+  </div>
+  <div>
+    <p>Which artist performs this song?</p>
+  </div>
+  <div class="album-section">
+    <div (click)="onAlbumClick()">
+      <img [src]="albumImageUrl" alt="Album 1" />
+    </div>
+    <div (click)="onAlbumClick()">
+      <img [src]="anotherAlbumImageUrl" alt="Album 2" />
+    </div>
+  </div>
+  <div class="stats-section">
+    <p>Correct: {{ correctAnswers }}</p>
+    <p>Incorrect: {{ incorrectAnswers }}</p>
+    <p>Current Score: {{ currentScorePercentage }}%</p>
+  </div>
+</div>

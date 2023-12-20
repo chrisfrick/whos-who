@@ -11,11 +11,13 @@ import { EntryComponent } from "./leaderboard/entry/entry.component";
 import { GameOverComponent } from "./game-over/game-over.component";
 import { GameStatsComponent } from "./components/game-stats/game-stats.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
+import { GameplayComponent } from "./gameplay/gameplay.component";
 
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
   { path: "game-over", component: GameOverComponent },
   { path: "leaderboard", component: LeaderboardComponent },
+  { path: "gameplay", component: GameplayComponent },
 ];
 
 @NgModule({
@@ -27,6 +29,7 @@ const routes: Routes = [
     WelcomeComponent,
     GameOverComponent,
     GameStatsComponent,
+    GameplayComponent,
   ],
 
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
