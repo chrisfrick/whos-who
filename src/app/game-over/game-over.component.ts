@@ -10,6 +10,7 @@ import Game from '../Models/Game';
 export class GameOverComponent implements OnInit {
 
   playerName: string = ''
+
   currentGame: Game = {
     playerName: "",
     finalScore: 0,
@@ -17,11 +18,16 @@ export class GameOverComponent implements OnInit {
     genres: [],
   };
 
+  currentLeaderboard: Game[] = []
+
   constructor(private gameData: UserService) {}
 
   ngOnInit(): void {
     // set current game
     this.gameData.currentGame.subscribe(currentGame => this.currentGame = currentGame)
+
+    // set current leaderboard
+    this.gameData.currentLeaderboard.subscribe(currentLeaderboard => this.currentLeaderboard = currentLeaderboard)
 
     // check for not-undefined correctAnswers and numberOfQuestions
     if (this.currentGame.correctAnswers && this.currentGame.numberOfQuestions) {
@@ -62,6 +68,10 @@ export class GameOverComponent implements OnInit {
 
   onSubmit() {
     // TODO: Handle adding player name and score to leaderboard
+    this.currentGame.playerName = this.playerName
+    const newLeaderboard = this.currentLeaderboard
+    newLeaderboard.push(this.currentGame)
+    this.gameData.updateCurrentLeaderboard(newLeaderboard)
   }
 
 }
