@@ -67,7 +67,6 @@ export class GameOverComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Handle adding player name and score to leaderboard
     this.currentGame.playerName = this.playerName
     const newLeaderboard = this.currentLeaderboard
     newLeaderboard.push(this.currentGame)
