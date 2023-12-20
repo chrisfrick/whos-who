@@ -16,6 +16,7 @@ import { GenreComponent } from './settings/genre/genre.component';
 
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
+  { path: "settings", component: SettingsComponent },
   { path: "game-over", component: GameOverComponent },
   { path: "leaderboard", component: LeaderboardComponent },
 ];
