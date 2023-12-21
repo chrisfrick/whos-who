@@ -26,18 +26,18 @@ export class TrackService {
       if (storedToken.expiration > Date.now()) {
         console.log("Token found in localstorage");
         this.token = storedToken.value;
+      } else {
+        console.log("Sending request to AWS endpoint");
+        request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
+          const newToken = {
+            value: access_token,
+            expiration: Date.now() + (expires_in - 20) * 1000,
+          };
+          localStorage.setItem(TOKEN_KEY, JSON.stringify(newToken));
+          this.token = newToken.value;
+        });
       }
-    } else {
-      console.log("Sending request to AWS endpoint");
-      request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
-        const newToken = {
-          value: access_token,
-          expiration: Date.now() + (expires_in - 20) * 1000,
-        };
-        localStorage.setItem(TOKEN_KEY, JSON.stringify(newToken));
-        this.token = newToken.value;
-      });
-    }
+    } 
     
     const genresQuery = genres.join(",");
     const genreSearchQuery = `genre: ${genresQuery}`;
