@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UserService } from "../../services/userService";
-import fetchFromSpotify from "../../services/api";
+import fetchFromSpotify, { request } from "../../services/api";
 import { Howl } from "howler";
 
-const SPOTIFY_SEARCH_ENDPOINT = "https://api.spotify.com/v1/search";
+const AUTH_ENDPOINT =
+  "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
+const SPOTIFY_SEARCH_ENDPOINT = "search";
 const TOKEN_KEY = "whos-who-access-token";
 
 @Component({
@@ -13,12 +15,15 @@ const TOKEN_KEY = "whos-who-access-token";
   styleUrls: ["./gameplay.component.css"],
 })
 export class GameplayComponent implements OnInit {
+  authLoading: boolean = false;
+  token: String = "";
+
   questionNumber: number = 1;
   correctAnswers: number = 0;
   incorrectAnswers: number = 0;
   currentScore: number = 0;
   selectedDifficulty: string = "";
-  selectedGenres: string[] = [];
+  selectedGenres: string[] = ['rock', 'pop'];
   sample: Howl = new Howl({
     src: ["sound.mp3"],
   });
@@ -34,43 +39,66 @@ export class GameplayComponent implements OnInit {
 
   constructor(private router: Router, private userService: UserService) {}
 
-  // what needs to be appended to the spotify search endpoint
-  // genre%3A+rock%2C+pop%2C+jazz&type=playlist
-
   ngOnInit(): void {
     this.userService.currentGame.subscribe((currentGame) => {
       this.selectedDifficulty = currentGame.difficulty;
       this.selectedGenres = currentGame.genres;
     });
 
-    this.loadQuestionData();
+    this.authLoading = true;
+    const storedTokenString = localStorage.getItem(TOKEN_KEY);
+    if (storedTokenString) {
+      const storedToken = JSON.parse(storedTokenString);
+      if (storedToken.expiration > Date.now()) {
+        console.log("Token found in localstorage");
+        this.authLoading = false;
+        this.token = storedToken.value;
+        this.loadQuestionData(this.token);
+        return;
+      }
+    }
+    console.log("Sending request to AWS endpoint");
+    request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
+      const newToken = {
+        value: access_token,
+        expiration: Date.now() + (expires_in - 20) * 1000,
+      };
+      localStorage.setItem(TOKEN_KEY, JSON.stringify(newToken));
+      this.authLoading = false;
+      this.token = newToken.value;
+      this.loadQuestionData(this.token);
+    });
+
+    this.loadQuestionData(this.token);
   }
 
-  loadQuestionData() {
-    const token = localStorage.getItem(TOKEN_KEY);
-
-    if (!token) {
-      return;
-    }
+  loadQuestionData = async (token: String) => {
 
     const genresQuery = this.selectedGenres.join(",");
-    const searchQuery = `genre:${genresQuery} difficulty:${this.selectedDifficulty}`;
+    const genreSearchQuery = `genre: ${genresQuery}`;
 
-    const spotifyParams = {
+    const playlistSpotifyParams = {
       token,
-      endpoint: SPOTIFY_SEARCH_ENDPOINT,
+      endpoint: 'search',
       params: {
-        q: searchQuery,
-        type: "track",
+        q: genreSearchQuery,
+        type: "playlist",
       },
     };
 
-    fetchFromSpotify(spotifyParams)
-      .then((response) => {
-        const tracks = response.tracks.items;
+    let playlists = await fetchFromSpotify(playlistSpotifyParams)
+    console.log(playlists.playlists.items)
 
-        this.albumImageUrl = tracks[0]?.album.images[0]?.url || "";
-        this.secondAlbumImageUrl = tracks[1]?.album.images[0]?.url || "";
+    fetchFromSpotify({
+      token: token,
+      endpoint: `playlists/${playlists.playlists.items[0].id}/tracks`
+    })
+      // .then(r => console.log(r))
+      .then((response) => {
+        const tracks = response.items;
+
+        this.albumImageUrl = tracks[0]?.track.album.images[0]?.url || "";
+        this.secondAlbumImageUrl = tracks[1]?.track.album.images[0]?.url || "";
 
         let trackName: string = "";
         let artists: string[] = [];
@@ -78,10 +106,10 @@ export class GameplayComponent implements OnInit {
         let albumImage: string = "";
 
         tracks.forEach((track: any) => {
-          trackName = track.name;
-          artists = track.artists.map((artist: any) => artist.name);
-          albumName = track.album.name;
-          albumImage = track.album.images[0].url;
+          trackName = track.track.name;
+          artists = track.track.artists.map((artist: any) => artist.name);
+          albumName = track.track.album.name;
+          albumImage = track.track.album.images[0].url;
         });
 
         if (trackName && artists && albumName && albumImage) {
@@ -125,7 +153,7 @@ export class GameplayComponent implements OnInit {
     const totalQuestions = 10;
 
     if (this.questionNumber <= totalQuestions) {
-      this.loadQuestionData();
+      this.loadQuestionData(this.token);
     } else {
       this.router.navigate(["/game-over"]);
     }
