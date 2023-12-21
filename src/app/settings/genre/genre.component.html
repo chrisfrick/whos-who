@@ -1,0 +1,7 @@
+<input
+  type="checkbox"
+  [checked]="isChecked || disabled"
+  [disabled]="disabled"
+  (change)="onCheckboxChange($event)"
+/>
+<span>{{ genre }}</span>
