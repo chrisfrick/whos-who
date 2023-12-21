@@ -147,9 +147,6 @@ export class GameplayComponent implements OnInit {
   }
 
   calculateCurrentScore(): number {
-    const totalQuestions = this.correctAnswers + this.incorrectAnswers;
-    console.log(totalQuestions)
-    console.log(this.correctAnswers)
-    return (this.correctAnswers / totalQuestions) * 100;
+    return (this.selectedDifficulty === 'hard' ? this.correctAnswers * 300 : this.selectedDifficulty === 'medium' ? this.correctAnswers * 200 : this.correctAnswers * 100)
   }
 }
