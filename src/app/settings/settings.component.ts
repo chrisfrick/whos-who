@@ -27,5 +27,9 @@ export class SettingsComponent implements OnInit {
 
   selectDifficulty(value: string) {
     this.gameDifficulty = value;
+    this.userData.updateCurrentGame({
+      ...this.game,
+      difficulty: value,
+    });
   }
 }
