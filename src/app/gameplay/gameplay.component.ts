@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UserService } from "../../services/userService";
-import fetchFromSpotify, { request } from "../../services/api";
 import { Howl } from "howler";
 import { TrackService } from "src/services/tracks.service";
 
@@ -45,8 +44,6 @@ export class GameplayComponent implements OnInit {
     album: string;
     albumImage: string;
   } | null = null;
-  
-  currentScorePercentage: number = 0;
 
   constructor(private router: Router, private userService: UserService,
     private tracksService: TrackService) {}
@@ -66,16 +63,6 @@ export class GameplayComponent implements OnInit {
       this.loading = false
     })
 
-    // if (this.tracks.length < 1 || this.tracks.length === undefined) {
-    //   this.loading = true
-    // } else {
-    //   this.loading = false
-    // }
-
-    console.log(this.tracks)
-    
-    
-    
   }
 
   loadQuestionData() {
@@ -147,6 +134,7 @@ export class GameplayComponent implements OnInit {
     }
 
     this.currentScore = this.calculateCurrentScore();
+    console.log(this.currentScore)
     this.questionNumber++;
 
     const totalQuestions = 10;
@@ -160,6 +148,8 @@ export class GameplayComponent implements OnInit {
 
   calculateCurrentScore(): number {
     const totalQuestions = this.correctAnswers + this.incorrectAnswers;
-    return (this.correctAnswers / totalQuestions) * 100 || 0;
+    console.log(totalQuestions)
+    console.log(this.correctAnswers)
+    return (this.correctAnswers / totalQuestions) * 100;
   }
 }
