@@ -96,6 +96,7 @@ export class SettingsComponent implements OnInit {
 
     if (this.isMediumSelected && this.selectedGenres.length !== 3) {
       alert('Please select exactly three genres for "medium" difficulty');
+      return
     }
 
     this.userData.updateCurrentGame(this.game);
