@@ -25,6 +25,14 @@ export class GameplayComponent implements OnInit {
 
   tracks: any[] = [];
   currentAudio: string = ''
+  currentQuestion: any = null
+  correctAnswer = 1;
+
+  firstAlbumImageUrl: string = "";
+  secondAlbumImageUrl: string = "";
+
+  firstAlbumArtist: string = "";
+  secondAlbumArtist: string = "";
 
   sample: Howl = new Howl({
     src: ["sound.mp3"],
@@ -35,8 +43,7 @@ export class GameplayComponent implements OnInit {
     album: string;
     albumImage: string;
   } | null = null;
-  albumImageUrl: string = "";
-  secondAlbumImageUrl: string = "";
+  
   currentScorePercentage: number = 0;
 
   constructor(private router: Router, private userService: UserService,
@@ -60,63 +67,45 @@ export class GameplayComponent implements OnInit {
       src: this.tracks[0].track.preview_url
     })
     console.log(this.sample)
+
+    this.loadQuestionData()
   }
 
-  // loadQuestionData = async (token: String) => {
+  loadQuestionData() {
+    this.tracksService.generateQuestion()
+    this.tracksService.currentQuestion.subscribe(question => this.currentQuestion = question)
+    console.log(this.currentQuestion)
 
-  //   const genresQuery = this.selectedGenres.join(",");
-  //   const genreSearchQuery = `genre: ${genresQuery}`;
+    this.firstAlbumImageUrl = this.currentQuestion.track1.track.album.images[0]?.url;
+    this.secondAlbumImageUrl = this.currentQuestion.track2.track.album.images[0]?.url;
+    this.firstAlbumArtist = this.currentQuestion.track1.track.artists[0].name;
+    this.secondAlbumArtist = this.currentQuestion.track2.track.artists[0].name;
+    this.correctAnswer = Math.round(Math.random()) + 1
+    this.correctAnswer === 1 
+      ? this.currentAudio = this.currentQuestion.track1.track.preview_url
+      : this.currentAudio = this.currentQuestion.track2.track.preview_url
 
-  //   const playlistSpotifyParams = {
-  //     token,
-  //     endpoint: 'search',
-  //     params: {
-  //       q: genreSearchQuery,
-  //       type: "playlist",
-  //     },
-  //   };
+    // let trackName: string = "";
+    // let artists: string[] = [];
+    // let albumName: string = "";
+    // let albumImage: string = "";
 
-  //   let playlists = await fetchFromSpotify(playlistSpotifyParams)
-  //   console.log(playlists.playlists.items)
+    // this.tracks.forEach((track: any) => {
+    //   trackName = track.track.name;
+    //   artists = track.track.artists.map((artist: any) => artist.name);
+    //   albumName = track.track.album.name;
+    //   albumImage = track.track.album.images[0].url;
+    // });
 
-  //   fetchFromSpotify({
-  //     token: token,
-  //     endpoint: `playlists/${playlists.playlists.items[0].id}/tracks`
-  //   })
-  //     // .then(r => console.log(r))
-  //     .then((response) => {
-  //       const tracks = response.items;
-  //       console.log(tracks)
-  //       this.tracks= tracks
-
-  //       this.albumImageUrl = tracks[0]?.track.album.images[0]?.url || "";
-  //       this.secondAlbumImageUrl = tracks[1]?.track.album.images[0]?.url || "";
-
-  //       let trackName: string = "";
-  //       let artists: string[] = [];
-  //       let albumName: string = "";
-  //       let albumImage: string = "";
-
-  //       tracks.forEach((track: any) => {
-  //         trackName = track.track.name;
-  //         artists = track.track.artists.map((artist: any) => artist.name);
-  //         albumName = track.track.album.name;
-  //         albumImage = track.track.album.images[0].url;
-  //       });
-
-  //       if (trackName && artists && albumName && albumImage) {
-  //         this.currentTrack = {
-  //           name: trackName,
-  //           artists,
-  //           album: albumName,
-  //           albumImage,
-  //         };
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }
+    // if (trackName && artists && albumName && albumImage) {
+    //   this.currentTrack = {
+    //     name: trackName,
+    //     artists,
+    //     album: albumName,
+    //     albumImage,
+    //   };
+    // }
+  }
 
   playSample() {
     if (this.sample) {
@@ -131,7 +120,7 @@ export class GameplayComponent implements OnInit {
   }
 
   chooseAlbum(albumNumber: number) {
-    const isCorrect = true;
+    const isCorrect = albumNumber === this.correctAnswer;
 
     if (isCorrect) {
       this.correctAnswers++;
@@ -145,7 +134,7 @@ export class GameplayComponent implements OnInit {
     const totalQuestions = 10;
 
     if (this.questionNumber <= totalQuestions) {
-      // this.loadQuestionData(this.token);
+      this.loadQuestionData();
     } else {
       this.router.navigate(["/game-over"]);
     }

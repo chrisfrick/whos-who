@@ -6,9 +6,8 @@
     <h3 class="game-question">Question #{{ questionNumber }}</h3>
   </div>
   <audio controls>
-      <source src="{{ currentAudio }}" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
+    <source src="{{ currentAudio }}" type="audio/mpeg">
+  </audio>
   <div>
     <button (click)="playSample()">Play Sample</button>
     <button (click)="pauseSample()">Pause Sample</button>
@@ -18,10 +17,12 @@
   </div>
   <div class="album-section">
     <div (click)="chooseAlbum(1)">
-      <img [src]="albumImageUrl" alt="Album 1" />
+      <img [src]="firstAlbumImageUrl" alt="Album 1" />
+      {{ firstAlbumArtist }}
     </div>
     <div (click)="chooseAlbum(2)">
       <img [src]="secondAlbumImageUrl" alt="Album 2" />
+      {{ secondAlbumArtist }}
     </div>
   </div>
   <div class="stats-section">
