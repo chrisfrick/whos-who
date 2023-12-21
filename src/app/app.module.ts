@@ -11,13 +11,14 @@ import { EntryComponent } from "./leaderboard/entry/entry.component";
 import { GameOverComponent } from "./game-over/game-over.component";
 import { GameStatsComponent } from "./components/game-stats/game-stats.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
-import { SettingsComponent } from './settings/settings.component';
-import { GenreComponent } from './settings/genre/genre.component';
+import { SettingsComponent } from "./settings/settings.component";
+import { GenreComponent } from "./settings/genre/genre.component";
 
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
   { path: "game-over", component: GameOverComponent },
   { path: "leaderboard", component: LeaderboardComponent },
+  { path: "settings", component: SettingsComponent },
 ];
 
 @NgModule({

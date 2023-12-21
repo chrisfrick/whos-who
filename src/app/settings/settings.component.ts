@@ -79,6 +79,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  navigateToLeaderboard() {
+    this.router.navigateByUrl("/leaderboard");
+  }
+
   onSubmit() {
     this.game.difficulty = this.gameDifficulty;
     this.game.genres = this.selectedGenres;
