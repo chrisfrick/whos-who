@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GameStatsComponent } from "../components/game-stats/game-stats.component";
 import { UserService } from "../../services/userService";
-import fetchFromSpotify, { request } from "../../services/api";
+import fetchFromSpotify from "../../services/api";
+import { Howl, Howler } from "howler";
 
 const SPOTIFY_SEARCH_ENDPOINT = "https://api.spotify.com/v1/search";
 const TOKEN_KEY = "whos-who-access-token";
@@ -18,6 +19,19 @@ export class GameplayComponent implements OnInit {
   incorrectAnswers: number = 0;
   currentScore: number = 0;
   selectedDifficulty: string = "";
+  selectedGenres: string[] = [];
+  sample: Howl = new Howl({
+    src: ["sound.mp3"],
+  });
+  currentTrack: {
+    name: string;
+    artists: string[];
+    album: string;
+    albumImage: string;
+  } | null = null;
+  albumImageUrl: string = "";
+  secondAlbumImageUrl: string = "";
+  currentScorePercentage: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +43,7 @@ export class GameplayComponent implements OnInit {
   ngOnInit(): void {
     this.userService.currentGame.subscribe((currentGame) => {
       this.selectedDifficulty = currentGame.difficulty;
+      this.selectedGenres = currentGame.genres;
     });
 
     this.loadQuestionData();
@@ -41,7 +56,8 @@ export class GameplayComponent implements OnInit {
       return;
     }
 
-    const searchQuery = "";
+    const genresQuery = this.selectedGenres.join(",");
+    const searchQuery = `genre:${genresQuery} difficulty:${this.selectedDifficulty}`;
 
     const spotifyParams = {
       token,
@@ -49,22 +65,53 @@ export class GameplayComponent implements OnInit {
       params: {
         q: searchQuery,
         type: "track",
-        difficulty: this.selectedDifficulty,
       },
     };
 
     fetchFromSpotify(spotifyParams)
       .then((response) => {
-        console.log(response);
+        const tracks = response.tracks.items;
+
+        this.albumImageUrl = tracks[0]?.album.images[0]?.url || "";
+        this.secondAlbumImageUrl = tracks[1]?.album.images[0]?.url || "";
+
+        let trackName: string = "";
+        let artists: string[] = [];
+        let albumName: string = "";
+        let albumImage: string = "";
+
+        tracks.forEach((track: any) => {
+          trackName = track.name;
+          artists = track.artists.map((artist: any) => artist.name);
+          albumName = track.album.name;
+          albumImage = track.album.images[0].url;
+        });
+
+        if (trackName && artists && albumName && albumImage) {
+          this.currentTrack = {
+            name: trackName,
+            artists,
+            album: albumName,
+            albumImage,
+          };
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
-  playSample() {}
+  playSample() {
+    if (this.sample) {
+      this.sample.play();
+    }
+  }
 
-  stopSample() {}
+  pauseSample() {
+    if (this.sample) {
+      this.sample.pause();
+    }
+  }
 
   chooseAlbum(albumNumber: number) {
     const isCorrect = true;

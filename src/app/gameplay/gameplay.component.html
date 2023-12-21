@@ -4,17 +4,18 @@
     <h3 class="game-question">Question #{{ questionNumber }}</h3>
   </div>
   <div>
-    <button (click)="onPlayButtonClick()">Play</button>
+    <button (click)="playSample()">Play Sample</button>
+    <button (click)="pauseSample()">Pause Sample</button>
   </div>
   <div>
     <p>Which artist performs this song?</p>
   </div>
   <div class="album-section">
-    <div (click)="onAlbumClick()">
+    <div (click)="chooseAlbum(1)">
       <img [src]="albumImageUrl" alt="Album 1" />
     </div>
-    <div (click)="onAlbumClick()">
-      <img [src]="anotherAlbumImageUrl" alt="Album 2" />
+    <div (click)="chooseAlbum(2)">
+      <img [src]="secondAlbumImageUrl" alt="Album 2" />
     </div>
   </div>
   <div class="stats-section">
