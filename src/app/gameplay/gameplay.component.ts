@@ -35,8 +35,10 @@ export class GameplayComponent implements OnInit {
   secondAlbumArtist: string = "";
 
   sample: Howl = new Howl({
-    src: ["sound.mp3"],
+    src: ["https://p.scdn.co/mp3-preview/f60beaf9fa2e73a0c1946c2402e0996270920f78?cid=74f434552d40467782bc1bc64b12b2e9"],
+    format: ["mp3"]
   });
+
   currentTrack: {
     name: string;
     artists: string[];
@@ -63,10 +65,7 @@ export class GameplayComponent implements OnInit {
 
     console.log(this.tracks)
     this.currentAudio = this.tracks[0].track.preview_url
-    this.sample = new Howl({
-      src: this.tracks[0].track.preview_url
-    })
-    console.log(this.sample)
+    
 
     this.loadQuestionData()
   }
@@ -84,6 +83,16 @@ export class GameplayComponent implements OnInit {
     this.correctAnswer === 1 
       ? this.currentAudio = this.currentQuestion.track1.track.preview_url
       : this.currentAudio = this.currentQuestion.track2.track.preview_url
+    this.correctAnswer === 1 
+      ? this.sample = new Howl({
+          src: [this.currentQuestion.track1.track.preview_url],
+          format: ["mp3"]
+        })
+      : this.sample = new Howl({
+          src: [this.currentQuestion.track2.track.preview_url],
+          format: ["mp3"]
+        })
+    
 
     // let trackName: string = "";
     // let artists: string[] = [];
@@ -121,6 +130,7 @@ export class GameplayComponent implements OnInit {
 
   chooseAlbum(albumNumber: number) {
     const isCorrect = albumNumber === this.correctAnswer;
+    this.sample.pause()
 
     if (isCorrect) {
       this.correctAnswers++;
