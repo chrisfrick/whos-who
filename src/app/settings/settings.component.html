@@ -1,10 +1,35 @@
 <div>
+  <h1>Choose Your Difficulty</h1>
   <div>
-    <h1 (click)="selectDifficulty('easy')">Easy</h1>
-    <h1 (click)="selectDifficulty('medium')">Medium</h1>
-    <h1 (click)="selectDifficulty('hard')">Hard</h1>
+    <h1
+      (click)="selectDifficulty('easy')"
+      [class.selected-difficulty]="isEasySelected"
+    >
+      Easy
+    </h1>
+    <h1
+      (click)="selectDifficulty('medium')"
+      [class.selected-difficulty]="isMediumSelected"
+    >
+      Medium
+    </h1>
+    <h1
+      (click)="selectDifficulty('hard')"
+      [class.selected-difficulty]="isHardSelected"
+    >
+      Hard
+    </h1>
   </div>
   <div>
-    <app-genre></app-genre>
+    <p *ngIf="isEasySelected">Please select 1 genre to guess from</p>
+    <p *ngIf="isMediumSelected">Please select 3 genres to guess from</p>
+    <app-genre
+      *ngFor="let genre of baseGenres"
+      [genre]="genre"
+      [isChecked]="isGenreChecked(genre)"
+      [disabled]="isHardSelected"
+      (checkboxChange)="onCheckboxChange(genre, $event)"
+    ></app-genre>
   </div>
+  <button (click)="onSubmit()">Play!</button>
 </div>
