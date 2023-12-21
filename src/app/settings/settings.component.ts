@@ -100,8 +100,6 @@ export class SettingsComponent implements OnInit {
 
     this.userData.updateCurrentGame(this.game);
 
-    this.tracksService.updateTracks(this.game.genres)
-
     this.router.navigateByUrl("/gameplay");
   }
 }

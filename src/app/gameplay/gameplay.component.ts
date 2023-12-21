@@ -13,7 +13,7 @@ import { TrackService } from "src/services/tracks.service";
   styleUrls: ["./gameplay.component.css"],
 })
 export class GameplayComponent implements OnInit {
-  authLoading: boolean = false;
+  loading: boolean = true;
   token: String = "";
 
   questionNumber: number = 1;
@@ -21,7 +21,7 @@ export class GameplayComponent implements OnInit {
   incorrectAnswers: number = 0;
   currentScore: number = 0;
   selectedDifficulty: string = "";
-  selectedGenres: string[] = ['rock', 'pop'];
+  selectedGenres: string[] = [];
 
   tracks: any[] = [];
   currentAudio: string = ''
@@ -57,17 +57,25 @@ export class GameplayComponent implements OnInit {
       this.selectedGenres = currentGame.genres;
     });
 
-    this.tracksService.tracks.subscribe(tracks => this.tracks = tracks)
+    this.tracksService.updateTracks(this.selectedGenres)
 
-    if (this.tracks.length < 1 || this.tracks.length === undefined) {
-      this.router.navigateByUrl('/settings')
-    }
+    this.tracksService.tracks.subscribe(tracks => {
+      this.tracks = tracks
+      this.currentAudio = this.tracks[0].track.preview_url
+      this.loadQuestionData()
+      this.loading = false
+    })
+
+    // if (this.tracks.length < 1 || this.tracks.length === undefined) {
+    //   this.loading = true
+    // } else {
+    //   this.loading = false
+    // }
 
     console.log(this.tracks)
-    this.currentAudio = this.tracks[0].track.preview_url
     
-
-    this.loadQuestionData()
+    
+    
   }
 
   loadQuestionData() {
