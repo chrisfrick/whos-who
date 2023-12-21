@@ -1,7 +1,34 @@
-.selected-difficulty {
-  color: red;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-div > div > h1 {
+.difficulty-selector {
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  width: 50%;
+  text-align: center;
+}
+
+.selected-difficulty {
+  color: #e45858;
+}
+
+div > div > h2 {
+  cursor: pointer;
+}
+
+button {
   cursor: pointer;
 }

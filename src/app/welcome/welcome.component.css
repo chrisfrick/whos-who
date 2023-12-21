@@ -7,11 +7,7 @@
 }
 
 button {
-  font-size: 2em;
+  font-size: 1.5em;
   border-radius: 5px;
-  padding: 5px 10px;
-}
-
-button:hover {
-  cursor: pointer;
+  padding: 15px 30px;
 }

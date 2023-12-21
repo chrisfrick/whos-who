@@ -3,5 +3,6 @@
   [checked]="isChecked || disabled"
   [disabled]="disabled"
   (change)="onCheckboxChange($event)"
+  id="{{ genre }}"
 />
-<span>{{ genre }}</span>
+<label for="{{ genre }}">{{ genre }}</label>

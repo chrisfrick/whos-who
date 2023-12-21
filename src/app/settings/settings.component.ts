@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
 
   gameDifficulty: string = "";
   selectedGenres: string[] = [];
-  isEasySelected: boolean = false;
+  isEasySelected: boolean = true;
   isMediumSelected: boolean = false;
   isHardSelected: boolean = false;
 
