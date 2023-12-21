@@ -13,13 +13,14 @@ import { GameStatsComponent } from "./components/game-stats/game-stats.component
 import { WelcomeComponent } from "./welcome/welcome.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { GenreComponent } from "./settings/genre/genre.component";
+import { GameplayComponent } from "./gameplay/gameplay.component";
 
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
   { path: "settings", component: SettingsComponent },
   { path: "game-over", component: GameOverComponent },
   { path: "leaderboard", component: LeaderboardComponent },
-  { path: "settings", component: SettingsComponent },
+  { path: "gameplay", component: GameplayComponent },
 ];
 
 @NgModule({
@@ -33,6 +34,7 @@ const routes: Routes = [
     GameStatsComponent,
     SettingsComponent,
     GenreComponent,
+    GameplayComponent,
   ],
 
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],

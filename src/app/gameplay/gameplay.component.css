@@ -1,0 +1,33 @@
+.container {
+  text-align: center;
+  margin: 20px auto;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.game-question {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.music-player {
+  margin-bottom: 20px;
+}
+
+.album-section {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.album-section img {
+  width: 150px;
+  cursor: pointer;
+}
+
+.stats-section {
+  margin-top: 20px;
+}
