@@ -1,9 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { GameStatsComponent } from "../components/game-stats/game-stats.component";
+import { Router } from "@angular/router";
 import { UserService } from "../../services/userService";
 import fetchFromSpotify from "../../services/api";
-import { Howl, Howler } from "howler";
+import { Howl } from "howler";
 
 const SPOTIFY_SEARCH_ENDPOINT = "https://api.spotify.com/v1/search";
 const TOKEN_KEY = "whos-who-access-token";
@@ -33,12 +32,10 @@ export class GameplayComponent implements OnInit {
   secondAlbumImageUrl: string = "";
   currentScorePercentage: number = 0;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private gameStatsComponent: GameStatsComponent,
-    private userService: UserService
-  ) {}
+  constructor(private router: Router, private userService: UserService) {}
+
+  // what needs to be appended to the spotify search endpoint
+  // genre%3A+rock%2C+pop%2C+jazz&type=playlist
 
   ngOnInit(): void {
     this.userService.currentGame.subscribe((currentGame) => {
