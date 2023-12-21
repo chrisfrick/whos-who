@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import Game from "../Models/Game";
 import { UserService } from "src/services/userService";
 import { Router } from "@angular/router";
+import { TrackService } from "src/services/tracks.service";
 
 @Component({
   selector: "app-settings",
@@ -31,7 +32,8 @@ export class SettingsComponent implements OnInit {
     "Alternative",
   ];
 
-  constructor(private userData: UserService, private router: Router) {}
+  constructor(private userData: UserService, private router: Router,
+    private tracksService: TrackService) {}
 
   ngOnInit(): void {
     this.userData.currentGame.subscribe(
@@ -97,6 +99,8 @@ export class SettingsComponent implements OnInit {
     }
 
     this.userData.updateCurrentGame(this.game);
+
+    this.tracksService.updateTracks(this.game.genres)
 
     this.router.navigateByUrl("/gameplay");
   }
