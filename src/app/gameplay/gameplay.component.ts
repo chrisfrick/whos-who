@@ -24,6 +24,7 @@ export class GameplayComponent implements OnInit {
   selectedGenres: string[] = ['rock', 'pop'];
 
   tracks: any[] = [];
+  currentAudio: string = ''
 
   sample: Howl = new Howl({
     src: ["sound.mp3"],
@@ -49,10 +50,16 @@ export class GameplayComponent implements OnInit {
 
     this.tracksService.tracks.subscribe(tracks => this.tracks = tracks)
 
-    console.log(this.tracks.length)
     if (this.tracks.length < 1 || this.tracks.length === undefined) {
       this.router.navigateByUrl('/settings')
     }
+
+    console.log(this.tracks)
+    this.currentAudio = this.tracks[0].track.preview_url
+    this.sample = new Howl({
+      src: this.tracks[0].track.preview_url
+    })
+    console.log(this.sample)
   }
 
   // loadQuestionData = async (token: String) => {
