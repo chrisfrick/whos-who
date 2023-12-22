@@ -1,26 +1,34 @@
-<div class="container">
-  <h1>Who's Who?</h1>
-  <div>
-    <h3 class="game-question">Question #{{ questionNumber }}</h3>
-  </div>
-  <div>
-    <button (click)="playSample()">Play Sample</button>
-    <button (click)="pauseSample()">Pause Sample</button>
-  </div>
-  <div>
-    <p>Which artist performs this song?</p>
-  </div>
-  <div class="album-section">
-    <div (click)="chooseAlbum(1)">
-      <img [src]="albumImageUrl" alt="Album 1" />
+<div *ngIf="!loading; else elseBlock">
+  <div class="container">
+    <h1>Who's Who?</h1>
+    <div>
+      <h2 class="game-question">Question #{{ questionNumber }}</h2>
     </div>
-    <div (click)="chooseAlbum(2)">
-      <img [src]="secondAlbumImageUrl" alt="Album 2" />
+    <div>
+      <button (click)="playSample()">Play Sample</button>
+      <button (click)="pauseSample()">Pause Sample</button>
     </div>
-  </div>
-  <div class="stats-section">
-    <p>Correct: {{ correctAnswers }}</p>
-    <p>Incorrect: {{ incorrectAnswers }}</p>
-    <p>Current Score: {{ currentScorePercentage }}%</p>
+    <div>
+      <h2>Which artist performs this song?</h2>
+    </div>
+    <div class="album-section">
+      <div class="album" (click)="chooseAlbum(1)">
+        <img [src]="firstAlbumImageUrl" alt="Album 1" />
+        <h3>{{ firstAlbumArtist }}</h3>
+      </div>
+      <div class="album" (click)="chooseAlbum(2)">
+        <img [src]="secondAlbumImageUrl" alt="Album 2" />
+        <h3>{{ secondAlbumArtist }}</h3>
+      </div>
+    </div>
+    <div class="stats-section">
+      <p>Correct: {{ correctAnswers }}</p>
+      <p>Incorrect: {{ incorrectAnswers }}</p>
+      <p>Current Score: {{ currentScore }}</p>
+    </div>
   </div>
 </div>
+
+<ng-template #elseBlock>
+  <div>Loading...</div>
+</ng-template>

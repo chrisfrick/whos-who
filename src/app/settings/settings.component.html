@@ -1,36 +1,39 @@
-<div>
-  <button (click)="navigateToLeaderboard()">Current Leaderboard</button>
+<div class="container">
   <h1>Choose Your Difficulty</h1>
-  <div>
-    <h1
+  <div class="difficulty-selector">
+    <h2
       (click)="selectDifficulty('easy')"
       [class.selected-difficulty]="isEasySelected"
     >
       Easy
-    </h1>
-    <h1
+    </h2>
+    <h2
       (click)="selectDifficulty('medium')"
       [class.selected-difficulty]="isMediumSelected"
     >
-      Medium
-    </h1>
-    <h1
+    Medium
+    </h2>
+    <h2
       (click)="selectDifficulty('hard')"
       [class.selected-difficulty]="isHardSelected"
     >
       Hard
-    </h1>
+    </h2>
   </div>
-  <div>
-    <p *ngIf="isEasySelected">Please select 1 genre to guess from</p>
-    <p *ngIf="isMediumSelected">Please select 3 genres to guess from</p>
-    <app-genre
-      *ngFor="let genre of baseGenres"
-      [genre]="genre"
-      [isChecked]="isGenreChecked(genre)"
-      [disabled]="isHardSelected"
-      (checkboxChange)="onCheckboxChange(genre, $event)"
-    ></app-genre>
+  <div class="container">
+    <h4 *ngIf="isEasySelected">Please select 1 genre to guess from</h4>
+    <h4 *ngIf="isMediumSelected">Please select 3 genres to guess from</h4>
+    <div class="genres">
+      <app-genre
+        *ngFor="let genre of baseGenres"
+        [genre]="genre"
+        [isChecked]="isGenreChecked(genre)"
+        [disabled]="isHardSelected"
+        (checkboxChange)="onCheckboxChange(genre, $event)"
+        class="checkbox"
+      ></app-genre>
+    </div>
   </div>
   <button (click)="onSubmit()">Play!</button>
+  <button (click)="navigateToLeaderboard()">View Leaderboard</button>
 </div>

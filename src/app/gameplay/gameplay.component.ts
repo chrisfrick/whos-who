@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UserService } from "../../services/userService";
-import fetchFromSpotify from "../../services/api";
 import { Howl } from "howler";
+import { TrackService } from "src/services/tracks.service";
 
-const SPOTIFY_SEARCH_ENDPOINT = "https://api.spotify.com/v1/search";
-const TOKEN_KEY = "whos-who-access-token";
+
 
 @Component({
   selector: "app-gameplay",
@@ -13,29 +12,41 @@ const TOKEN_KEY = "whos-who-access-token";
   styleUrls: ["./gameplay.component.css"],
 })
 export class GameplayComponent implements OnInit {
+  loading: boolean = true;
+  token: String = "";
+
   questionNumber: number = 1;
   correctAnswers: number = 0;
   incorrectAnswers: number = 0;
   currentScore: number = 0;
   selectedDifficulty: string = "";
   selectedGenres: string[] = [];
+
+  tracks: any[] = [];
+  currentAudio: string = ''
+  currentQuestion: any = null
+  correctAnswer = 1;
+
+  firstAlbumImageUrl: string = "";
+  secondAlbumImageUrl: string = "";
+
+  firstAlbumArtist: string = "";
+  secondAlbumArtist: string = "";
+
   sample: Howl = new Howl({
-    src: ["sound.mp3"],
+    src: ["https://p.scdn.co/mp3-preview/f60beaf9fa2e73a0c1946c2402e0996270920f78?cid=74f434552d40467782bc1bc64b12b2e9"],
+    format: ["mp3"]
   });
+
   currentTrack: {
     name: string;
     artists: string[];
     album: string;
     albumImage: string;
   } | null = null;
-  albumImageUrl: string = "";
-  secondAlbumImageUrl: string = "";
-  currentScorePercentage: number = 0;
 
-  constructor(private router: Router, private userService: UserService) {}
-
-  // what needs to be appended to the spotify search endpoint
-  // genre%3A+rock%2C+pop%2C+jazz&type=playlist
+  constructor(private router: Router, private userService: UserService,
+    private tracksService: TrackService) {}
 
   ngOnInit(): void {
     this.userService.currentGame.subscribe((currentGame) => {
@@ -43,59 +54,61 @@ export class GameplayComponent implements OnInit {
       this.selectedGenres = currentGame.genres;
     });
 
-    this.loadQuestionData();
+    this.tracksService.updateTracks(this.selectedGenres)
+
+    this.tracksService.tracks.subscribe(tracks => {
+      this.tracks = tracks
+      this.currentAudio = this.tracks[0].track.preview_url
+      this.loadQuestionData()
+      this.loading = false
+    })
+
   }
 
   loadQuestionData() {
-    const token = localStorage.getItem(TOKEN_KEY);
+    this.tracksService.generateQuestion()
+    this.tracksService.currentQuestion.subscribe(question => this.currentQuestion = question)
+    console.log(this.currentQuestion)
 
-    if (!token) {
-      return;
-    }
+    this.firstAlbumImageUrl = this.currentQuestion.track1.track.album.images[0]?.url;
+    this.secondAlbumImageUrl = this.currentQuestion.track2.track.album.images[0]?.url;
+    this.firstAlbumArtist = this.currentQuestion.track1.track.artists[0].name;
+    this.secondAlbumArtist = this.currentQuestion.track2.track.artists[0].name;
+    this.correctAnswer = Math.round(Math.random()) + 1
+    this.correctAnswer === 1 
+      ? this.currentAudio = this.currentQuestion.track1.track.preview_url
+      : this.currentAudio = this.currentQuestion.track2.track.preview_url
+    this.correctAnswer === 1 
+      ? this.sample = new Howl({
+          src: [this.currentQuestion.track1.track.preview_url],
+          format: ["mp3"]
+        })
+      : this.sample = new Howl({
+          src: [this.currentQuestion.track2.track.preview_url],
+          format: ["mp3"]
+        })
+    
 
-    const genresQuery = this.selectedGenres.join(",");
-    const searchQuery = `genre:${genresQuery} difficulty:${this.selectedDifficulty}`;
+    // let trackName: string = "";
+    // let artists: string[] = [];
+    // let albumName: string = "";
+    // let albumImage: string = "";
 
-    const spotifyParams = {
-      token,
-      endpoint: SPOTIFY_SEARCH_ENDPOINT,
-      params: {
-        q: searchQuery,
-        type: "track",
-      },
-    };
+    // this.tracks.forEach((track: any) => {
+    //   trackName = track.track.name;
+    //   artists = track.track.artists.map((artist: any) => artist.name);
+    //   albumName = track.track.album.name;
+    //   albumImage = track.track.album.images[0].url;
+    // });
 
-    fetchFromSpotify(spotifyParams)
-      .then((response) => {
-        const tracks = response.tracks.items;
-
-        this.albumImageUrl = tracks[0]?.album.images[0]?.url || "";
-        this.secondAlbumImageUrl = tracks[1]?.album.images[0]?.url || "";
-
-        let trackName: string = "";
-        let artists: string[] = [];
-        let albumName: string = "";
-        let albumImage: string = "";
-
-        tracks.forEach((track: any) => {
-          trackName = track.name;
-          artists = track.artists.map((artist: any) => artist.name);
-          albumName = track.album.name;
-          albumImage = track.album.images[0].url;
-        });
-
-        if (trackName && artists && albumName && albumImage) {
-          this.currentTrack = {
-            name: trackName,
-            artists,
-            album: albumName,
-            albumImage,
-          };
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // if (trackName && artists && albumName && albumImage) {
+    //   this.currentTrack = {
+    //     name: trackName,
+    //     artists,
+    //     album: albumName,
+    //     albumImage,
+    //   };
+    // }
   }
 
   playSample() {
@@ -111,7 +124,8 @@ export class GameplayComponent implements OnInit {
   }
 
   chooseAlbum(albumNumber: number) {
-    const isCorrect = true;
+    const isCorrect = albumNumber === this.correctAnswer;
+    this.sample.pause()
 
     if (isCorrect) {
       this.correctAnswers++;
@@ -120,6 +134,7 @@ export class GameplayComponent implements OnInit {
     }
 
     this.currentScore = this.calculateCurrentScore();
+    console.log(this.currentScore)
     this.questionNumber++;
 
     const totalQuestions = 10;
@@ -132,7 +147,6 @@ export class GameplayComponent implements OnInit {
   }
 
   calculateCurrentScore(): number {
-    const totalQuestions = this.correctAnswers + this.incorrectAnswers;
-    return (this.correctAnswers / totalQuestions) * 100 || 0;
+    return (this.selectedDifficulty === 'hard' ? this.correctAnswers * 300 : this.selectedDifficulty === 'medium' ? this.correctAnswers * 200 : this.correctAnswers * 100)
   }
 }

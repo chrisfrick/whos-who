@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import Game from "../Models/Game";
 import { UserService } from "src/services/userService";
 import { Router } from "@angular/router";
+import { TrackService } from "src/services/tracks.service";
 
 @Component({
   selector: "app-settings",
@@ -18,7 +19,7 @@ export class SettingsComponent implements OnInit {
 
   gameDifficulty: string = "";
   selectedGenres: string[] = [];
-  isEasySelected: boolean = false;
+  isEasySelected: boolean = true;
   isMediumSelected: boolean = false;
   isHardSelected: boolean = false;
 
@@ -31,7 +32,8 @@ export class SettingsComponent implements OnInit {
     "Alternative",
   ];
 
-  constructor(private userData: UserService, private router: Router) {}
+  constructor(private userData: UserService, private router: Router,
+    private tracksService: TrackService) {}
 
   ngOnInit(): void {
     this.userData.currentGame.subscribe(
@@ -94,6 +96,7 @@ export class SettingsComponent implements OnInit {
 
     if (this.isMediumSelected && this.selectedGenres.length !== 3) {
       alert('Please select exactly three genres for "medium" difficulty');
+      return
     }
 
     this.userData.updateCurrentGame(this.game);
