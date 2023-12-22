@@ -11,4 +11,11 @@
       [finalScore]="user.finalScore"
     ></app-entry>
   </div>
+  <div class="navigation-buttons">
+    <a routerLink="/settings">
+      <button (click)="partialReset()">
+        {{ game.playerName !== "" ? "Play Again" : "Go To Settings" }}
+      </button>
+    </a>
+  </div>
 </div>

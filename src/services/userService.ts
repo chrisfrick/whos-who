@@ -12,7 +12,7 @@ export class UserService {
     incorrectAnswers: 0,
     finalScore: 0,
     playerName: "",
-    difficulty: "",
+    difficulty: "easy",
     genres: [],
   });
   currentGame = this.currentGameSource.asObservable();
@@ -20,19 +20,19 @@ export class UserService {
   private currentLeaderboardSource = new BehaviorSubject<Game[]>([
     {
       playerName: "MadMax!!",
-      finalScore: 10,
+      finalScore: 100,
       difficulty: "easy",
       genres: ["rock"],
     },
     {
       playerName: "Mirag3",
-      finalScore: 8,
+      finalScore: 800,
       difficulty: "easy",
       genres: ["rock"],
     },
     {
       playerName: "Bob",
-      finalScore: 12,
+      finalScore: 400,
       difficulty: "easy",
       genres: ["rock"],
     },

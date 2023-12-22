@@ -23,22 +23,23 @@ export class SettingsComponent implements OnInit {
   isMediumSelected: boolean = false;
   isHardSelected: boolean = false;
 
-  baseGenres: string[] = [
-    "Rock",
-    "Pop",
-    "R&B",
-    "Soundtrack",
-    "Jazz",
-    "Alternative",
-  ];
+  baseGenres: string[] = ["Rock", "Pop", "R&B", "Movie", "Jazz", "Alternative"];
 
-  constructor(private userData: UserService, private router: Router,
-    private tracksService: TrackService) {}
+  constructor(
+    private userData: UserService,
+    private router: Router,
+    private tracksService: TrackService
+  ) {}
 
   ngOnInit(): void {
     this.userData.currentGame.subscribe(
       (currentGame) => (this.game = currentGame)
     );
+    this.selectDifficulty(this.game.difficulty);
+    this.selectedGenres = this.game.genres;
+    if (this.selectedGenres.length > 0) {
+      this.game.genres.forEach((genre) => this.isGenreChecked(genre));
+    }
   }
 
   selectDifficulty(value: string) {
@@ -79,6 +80,7 @@ export class SettingsComponent implements OnInit {
         this.selectedGenres.splice(index, 1);
       }
     }
+    console.log(this.selectedGenres);
   }
 
   navigateToLeaderboard() {
@@ -96,8 +98,10 @@ export class SettingsComponent implements OnInit {
 
     if (this.isMediumSelected && this.selectedGenres.length !== 3) {
       alert('Please select exactly three genres for "medium" difficulty');
-      return
+      return;
     }
+
+    console.log(this.game);
 
     this.userData.updateCurrentGame(this.game);
 

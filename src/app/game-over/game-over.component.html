@@ -2,16 +2,8 @@
   <h1>Game Over</h1>
   <app-game-stats></app-game-stats>
   <div class="name-form">
-      Name:
-      <input type="text" required id="playerName" [(ngModel)]="playerName"/>
-      <button (click)="onSubmit()">Done</button>
-  </div>
-  <div class="navigation-buttons">
-    <a routerLink="/gameplay">
-      <button>Play Again</button>
-    </a>
-    <a routerLink="/leaderboard">
-      <button>View Leaderboard</button>
-    </a>
+    Name:
+    <input type="text" required id="playerName" [(ngModel)]="playerName" />
+    <a routerLink="/leaderboard"><button (click)="onSubmit()">Done</button></a>
   </div>
 </div>

@@ -15,3 +15,10 @@
 .entries {
   width: 50%;
 }
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1vw;
+  margin-top: 5vh;
+}
