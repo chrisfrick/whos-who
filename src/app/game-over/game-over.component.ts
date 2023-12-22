@@ -70,8 +70,15 @@ export class GameOverComponent implements OnInit {
 
   onSubmit() {
     this.currentGame.playerName = this.playerName;
-    const newLeaderboard = this.currentLeaderboard;
-    newLeaderboard.push(this.currentGame);
+
+    const newGame: Game = {
+      playerName: this.currentGame.playerName,
+      finalScore: this.currentGame.finalScore,
+      difficulty: this.currentGame.difficulty,
+      genres: this.currentGame.genres.slice(),
+    };
+
+    const newLeaderboard = [...this.currentLeaderboard, newGame];
     this.gameData.updateCurrentGame(this.currentGame);
     this.gameData.updateCurrentLeaderboard(newLeaderboard);
   }

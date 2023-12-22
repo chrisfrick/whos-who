@@ -13,7 +13,7 @@
   </div>
   <div class="navigation-buttons">
     <a routerLink="/settings">
-      <button>
+      <button (click)="partialReset()">
         {{ game.playerName !== "" ? "Play Again" : "Go To Settings" }}
       </button>
     </a>

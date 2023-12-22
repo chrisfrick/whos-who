@@ -35,6 +35,11 @@ export class SettingsComponent implements OnInit {
     this.userData.currentGame.subscribe(
       (currentGame) => (this.game = currentGame)
     );
+    this.selectDifficulty(this.game.difficulty);
+    this.selectedGenres = this.game.genres;
+    if (this.selectedGenres.length > 0) {
+      this.game.genres.forEach((genre) => this.isGenreChecked(genre));
+    }
   }
 
   selectDifficulty(value: string) {
