@@ -13,7 +13,9 @@
   </div>
   <div class="navigation-buttons">
     <a routerLink="/settings">
-      <button>Play Again</button>
+      <button>
+        {{ game.playerName !== "" ? "Play Again" : "Go To Settings" }}
+      </button>
     </a>
   </div>
 </div>

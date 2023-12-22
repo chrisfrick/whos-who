@@ -12,7 +12,18 @@ export class LeaderboardComponent implements OnInit {
 
   leaderboard: Game[] = [];
 
+  game: Game = {
+    finalScore: 0,
+    playerName: "",
+    difficulty: "",
+    genres: [],
+  };
+
   ngOnInit(): void {
+    this.userData.currentGame.subscribe(
+      (currentGame) => (this.game = currentGame)
+    );
+    console.log(this.game);
     this.userData.currentLeaderboard.subscribe(
       (currentLeaderboard) => (this.leaderboard = currentLeaderboard)
     );
