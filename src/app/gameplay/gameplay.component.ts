@@ -68,6 +68,8 @@ export class GameplayComponent implements OnInit {
       this.selectedGenres = currentGame.genres;
     });
 
+    console.log(this.selectedGenres);
+
     this.tracksService.updateTracks(this.selectedGenres);
 
     this.tracksService.tracks.subscribe((tracks) => {
@@ -104,27 +106,6 @@ export class GameplayComponent implements OnInit {
           src: [this.currentQuestion.track2.track.preview_url],
           format: ["mp3"],
         }));
-
-    // let trackName: string = "";
-    // let artists: string[] = [];
-    // let albumName: string = "";
-    // let albumImage: string = "";
-
-    // this.tracks.forEach((track: any) => {
-    //   trackName = track.track.name;
-    //   artists = track.track.artists.map((artist: any) => artist.name);
-    //   albumName = track.track.album.name;
-    //   albumImage = track.track.album.images[0].url;
-    // });
-
-    // if (trackName && artists && albumName && albumImage) {
-    //   this.currentTrack = {
-    //     name: trackName,
-    //     artists,
-    //     album: albumName,
-    //     albumImage,
-    //   };
-    // }
   }
 
   playSample() {

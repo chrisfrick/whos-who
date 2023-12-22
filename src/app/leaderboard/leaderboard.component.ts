@@ -32,7 +32,6 @@ export class LeaderboardComponent implements OnInit {
   }
 
   partialReset() {
-    console.log(this.game);
     this.game.correctAnswers = 0;
     this.game.incorrectAnswers = 0;
     this.userData.updateCurrentGame(this.game);

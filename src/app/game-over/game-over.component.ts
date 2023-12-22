@@ -31,33 +31,6 @@ export class GameOverComponent implements OnInit {
     this.gameData.currentLeaderboard.subscribe(
       (currentLeaderboard) => (this.currentLeaderboard = currentLeaderboard)
     );
-
-    // // check for not-undefined correctAnswers and numberOfQuestions
-    // if (this.currentGame.correctAnswers && this.currentGame.numberOfQuestions) {
-    //   // calculate final score based on difficulty
-    //   switch (this.currentGame.difficulty) {
-    //     case "hard":
-    //       this.currentGame.finalScore = this.calculateFinalScore(
-    //         this.currentGame.correctAnswers,
-    //         300
-    //       );
-    //       break;
-    //     case "medium":
-    //       this.currentGame.finalScore = this.calculateFinalScore(
-    //         this.currentGame.correctAnswers,
-    //         200
-    //       );
-    //       break;
-    //     case "easy":
-    //       this.currentGame.finalScore = this.calculateFinalScore(
-    //         this.currentGame.correctAnswers,
-    //         100
-    //       );
-    //   }
-    // }
-
-    // // update userService with final score
-    // this.gameData.updateCurrentGame(this.currentGame);
   }
 
   calculateFinalScore(correctAnswers: number, difficultyMultiplier: number) {

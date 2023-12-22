@@ -80,6 +80,7 @@ export class SettingsComponent implements OnInit {
         this.selectedGenres.splice(index, 1);
       }
     }
+    console.log(this.selectedGenres);
   }
 
   navigateToLeaderboard() {
@@ -99,6 +100,8 @@ export class SettingsComponent implements OnInit {
       alert('Please select exactly three genres for "medium" difficulty');
       return;
     }
+
+    console.log(this.game);
 
     this.userData.updateCurrentGame(this.game);
 
