@@ -23,7 +23,7 @@ export class LeaderboardComponent implements OnInit {
     this.userData.currentGame.subscribe(
       (currentGame) => (this.game = currentGame)
     );
-    console.log(this.game);
+
     this.userData.currentLeaderboard.subscribe(
       (currentLeaderboard) => (this.leaderboard = currentLeaderboard)
     );
